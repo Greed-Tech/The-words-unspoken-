@@ -17,7 +17,6 @@ body {
     align-items: center;
     text-align: center;
     overflow: hidden;
-    cursor: pointer;
 }
 
 .card {
@@ -57,7 +56,6 @@ button:hover {
     letter-spacing: 1px;
 }
 
-/* ✨ GLOWING YES */
 .yes-btn {
     border-color: #fff;
     box-shadow: 0 0 10px rgba(255,255,255,0.4);
@@ -69,18 +67,19 @@ button:hover {
     to   { box-shadow: 0 0 18px rgba(255,255,255,0.8); }
 }
 
-.heart, .flower, .gift {
+.float {
     position: absolute;
-    bottom: -20px;
+    bottom: -30px;
     animation: float linear infinite;
-    opacity: 0.8;
+    opacity: 0.85;
     z-index: 1;
+    pointer-events: none;
 }
 
 @keyframes float {
-    0% { transform: translateY(0); opacity: 0; }
+    0% { transform: translateY(0) scale(1); opacity: 0; }
     10% { opacity: 1; }
-    100% { transform: translateY(-110vh); opacity: 0; }
+    100% { transform: translateY(-120vh) scale(1.6); opacity: 0; }
 }
 
 @keyframes fadeIn {
@@ -171,9 +170,7 @@ function nextStep() {
 
 function yes() {
     clearTimeout(secretTimer);
-    const c = document.getElementById("content");
-
-    c.innerHTML = `
+    document.getElementById("content").innerHTML = `
     <h1>After Midnight</h1>
     <p>
         Then my heart rests easy tonight.<br>
@@ -183,10 +180,6 @@ function yes() {
         ด้วยรัก — <span style="font-size:14px;">my damsel 🌙</span>
     </p>
     <p style="margin-top:16px; opacity:0.6;">— Sho</p>`;
-
-    spawnHearts();
-    spawnFlowers();
-    spawnGifts();
 }
 
 function secret() {
@@ -210,51 +203,21 @@ function secretEnding() {
     <p style="margin-top:16px; opacity:0.6;">— Sho</p>`;
 }
 
-function spawnHearts() {
-    setInterval(() => {
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.innerHTML = "♡";
-        h.style.left = Math.random()*100 + "vw";
-        h.style.animationDuration = (7 + Math.random()*6) + "s";
-        h.style.color = "white";
+/* 🌼🍨 FLOATING ELEMENTS THROUGHOUT */
+const floatItems = ["♡","🤍","🖤","🌼","💐","🍨"];
 
-        setInterval(() => {
-            h.style.color = h.style.color === "white" ? "black" : "white";
-        }, 3000);
-
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 14000);
-    }, 600);
+function spawnFloating() {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.innerHTML = floatItems[Math.floor(Math.random()*floatItems.length)];
+    el.style.left = Math.random()*100 + "vw";
+    el.style.fontSize = (18 + Math.random()*18) + "px";
+    el.style.animationDuration = (7 + Math.random()*6) + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 14000);
 }
 
-function spawnFlowers() {
-    ["🤍","🖤","🌼","💐"].forEach(sym => {
-        for (let i=0;i<4;i++) {
-            const f = document.createElement("div");
-            f.className = "flower";
-            f.innerHTML = sym;
-            f.style.left = Math.random()*100 + "vw";
-            f.style.animationDuration = (8 + Math.random()*6) + "s";
-            document.body.appendChild(f);
-            setTimeout(() => f.remove(), 15000);
-        }
-    });
-}
-
-function spawnGifts() {
-    ["🍨","💐"].forEach(sym => {
-        for (let i=0;i<4;i++) {
-            const g = document.createElement("div");
-            g.className = "gift";
-            g.innerHTML = sym;
-            g.style.left = Math.random()*100 + "vw";
-            g.style.animationDuration = (9 + Math.random()*6) + "s";
-            document.body.appendChild(g);
-            setTimeout(() => g.remove(), 15000);
-        }
-    });
-}
+setInterval(spawnFloating, 600);
 </script>
 
 </body>
